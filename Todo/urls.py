@@ -1,5 +1,4 @@
 from django.urls import path
-from .views import show_index_page, list_tasks, add_task, edit_task, delete_task
 from .views import show_index_page, list_tasks, add_task, edit_task, delete_task, show_register_page
 
 urlpatterns = [
