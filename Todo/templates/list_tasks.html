@@ -1,0 +1,100 @@
+<!-- 👇🏼 Faig una extensió del layout -->
+{% extends 'layout.html' %}
+
+
+<!-- 👇🏼 Inicio el block de 'custom_css_file' definit en el 'layout.html' (per asignar un archiu css en comptes de crear "estils en línia") -->
+<!-- ➕ L'arxiu 'list_tasks.css' s'ubica en 'static' al mateix nivell que 'templats' (dins del projecte 'Todo') -->
+<!-- ➕ A més a més, si es carga un arxiu 'static', s'ha de indicar "load static" -->
+{% load static %}
+{% block custom_css_file %}
+<link rel="stylesheet" href="{% static 'css/list_tasks.css' %}">
+{% endblock %}
+
+<!-- 👇🏼 Inicio i finalitzo (1 línia) el block de 'title' definit en el 'layout.html' -->
+{ % block title } {{ "Llistat de tasques" }} { % endblock % }
+
+<!-- 👇🏼 Inicio el block de 'main' definit en el 'layout.html' -->
+{% block main %}
+
+<h1>To-Do app</h1>
+
+<div id="new-task-container">
+    <h3>Afegir nova tasca</h3>
+    <!-- La 'action' s'ha d'indicar el "name" de la "urls"! (+ parámetres si hi ha) -->
+    <form action="{% url 'afegir_task' %}" method="POST">
+        {% csrf_token %}
+        <label>
+            Títol
+            <!-- Afegeixo un 'name' perque després per validar en TaskForm, necesitaré identificarlo -->
+            <input name="title" type="text" placeholder="Introdueix un títol per la tasca...">
+        </label>
+
+        <label>
+            Autor
+            <select name="author_id">
+                <option value="" disabled selected>Selecciona un autor</option>
+                {% for author in authors %}
+                <!-- En la etiqueta <option>, s'ha d'indicar en "value" el valor que s'enviarà al formulari (user.author.id) -->
+                <!-- Y també s'ha d'indicar visualmente quin usuari hi ha (username) -->
+                <option value="{{ author.id }}">{{ author.user.username }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            Categories a seleccionar
+            <select name="categories_ids" multiple>
+                {% for c in categories %}
+                <!-- No fa falta indicar-li a la category el '.name' perque el model de Category, quan es crida al objecte, té la funció '__str__' que retorna el nom -->
+                <option value="{{ c.id }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <button>Afegir nova tasca</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Nom de la tasca</th>
+        <th>Autor</th>
+        <th>Categories</th>
+        <th>Completat</th>
+        <th>Accions</th>
+    </thead>
+
+    <tbody>
+        <!-- 👇🏼 Recorro les 'tasks' amb un "for" -->
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.author }}</td>
+            <td>
+                <!-- Com 'categories' es una relació Many-To-Many, per veure-les, necesito iterarles -->
+                <!-- ➕ Faig un condicional per si no es l'última iteració, introdueixi una ',' -->
+                {% for category in task.categories.all %}
+                {{ category }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ task.completed }}</td>
+            <td>
+                <button>
+                    Editar
+                </button>
+                <!--  -->
+                <form action="{% url 'eliminar_task' task.id %}" method="POST">
+                    {% csrf_token %}
+                    <button>
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
