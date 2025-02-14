@@ -1,0 +1,22 @@
+<h1>Edit task {{task.title}}</h1>
+
+<form action="{% url 'editar_task' task.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" value="{{ task.title }}" name="title">
+
+    <!-- <input type="text" value="{{ task.author }}" > -->
+
+    <select multiple name="categories_ids">
+        {% for c in categories %}
+        <!-- No fa falta indicar-li a la category el '.name' perque el model de Category, quan es crida al objecte, té la funció '__str__' que retorna el nom -->
+        <option value="{{ c.id }}">{{ c }}</option>
+        {% endfor %}
+    </select>
+    
+    <label>
+        Completed
+        <input type="checkbox" name="completed" value="True" {% if task.completed %}checked{% endif %}>
+    </label>
+    <button>Update task</button>
+    
+</form>

@@ -81,11 +81,13 @@
             </td>
             <td>{{ task.completed }}</td>
             <td>
-                <button>
-                    Editar
-                </button>
-                <!--  -->
-                <form action="{% url 'eliminar_task' task.id %}" method="POST">
+                <form action="{% url 'editar_task' task.id %}" method="GET">
+                    {% csrf_token %}
+                    <button>
+                        Editar
+                    </button>
+                </form>
+                <form action="{% url 'eliminar_task' task.id %}" method="GET">
                     {% csrf_token %}
                     <button>
                         Eliminar

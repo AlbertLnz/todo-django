@@ -45,7 +45,30 @@ def add_task(request):
     else:
         return TaskForm()
 
-def edit_task(request, id):
+def edit_task(request, task_id):
+
+    if request.method == "GET":
+        task = get_object_or_404(Task, id=task_id)
+        categories = Category.objects.all()
+        return render(request, 'edit_task.html', { "task": task, "categories": categories })
+
+    else:
+        task = get_object_or_404(Task, id=task_id)
+        categories_ids = request.POST.getlist('categories_ids')
+        categories = Category.objects.filter(id__in=categories_ids)
+        title = request.POST.get('title')
+        is_completed = bool(request.POST.getlist('completed'))
+
+        task.categories.set(categories)
+
+        task.title = title
+        task.completed = is_completed
+        task.categories.set(categories)  # Asignar las categorías seleccionadas
+
+        task.save()
+
+        return redirect('llistar_tasques')
+    # task = 
     # libro = get_object_or_404(Libro, id=id)
     # if request.method == 'POST':
     # form = LibroForm(request.POST, instance=libro)
@@ -55,18 +78,8 @@ def edit_task(request, id):
 
     # else:
     # form = LibroForm(instance=libro)
-    # return render(request, 'libros/form_libro.html', {'form': form})
-    pass
 
 def delete_task(request, id):
     task = get_object_or_404(Task, id=id)
-    if request.method == 'POST':
-        task.delete()
+    task.delete()
     return redirect('llistar_tasques')
-
-# def eliminar_libro(request, id):
-#     libro = get_object_or_404(Libro, id=id)
-#     if request.method == 'POST':
-#         libro.delete()
-#         return redirect('lista_libros')
-#     return render(request, 'aplicacion1/eliminar_libro.html', {'libro': libro})
