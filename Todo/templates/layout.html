@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 👇🏼 Aquí creo un block on insertaré de manera dinàmica el arxiu .css si ho necessites -->
+    {% block custom_css_file %}{% endblock %}
+
+    <!-- 👇🏼 Aquí es on ha d'anar el titol de la página web perque es vegi en la pestanya web -->
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <!-- 👇🏼 Aquí anirá el contingut principal de la web, anomenat 'main' -->
+    {% block main %}
+    {% endblock %}
+</body>
+
+</html>

@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import list_tasks
+from .views import show_index_page, list_tasks, add_task, edit_task, delete_task
+
 urlpatterns = [
-    path('', list_tasks, name='list_tasks'),
-    # path('agregar/', views.agregar_libro, name='agregar_libro'),
-    # path('editar/<int:id>/', views.editar_libro,
-    # name='editar_libro'),
-    # path('eliminar/<int:id>/', views.eliminar_libro,
-    # name='eliminar_libro'),
+    path('', show_index_page, name='index'),
+    path('list/', list_tasks, name='llistar_tasques'),
+    path('agregar/', add_task, name='afegir_task'),
+    path('editar/<int:id>/', edit_task),
+    path('eliminar/<int:id>/', delete_task, name='eliminar_task'),
 ]
