@@ -8,13 +8,6 @@ from .forms import TaskForm, AuthorForm, UserForm
 def show_index_page(request):
     return render(request, 'index.html', { 'title': "Aplicació To-Do"})
 
-def show_register_page(request):
-    authorForm = AuthorForm() 
-    userForm = UserForm() 
-    return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
-
-
-
 def list_tasks(request):
     # Aqui utilizo 'Author' en compte de 'User' perque son molt semblants (es diferencien només que User no té dni)
     # I en la vista, només vull el "name", així que es indiferent
@@ -89,3 +82,41 @@ def delete_task(request, id):
     task = get_object_or_404(Task, id=id)
     task.delete()
     return redirect('llistar_tasques')
+
+
+# ########### AUTHOR #####################
+
+
+def show_register_page(request):
+    authorForm = AuthorForm() 
+    userForm = UserForm() 
+    return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
+
+
+def add_author(request):
+    if request.method == 'POST':
+        userForm = UserForm(request.POST)
+        authorForm = AuthorForm(request.POST)
+    
+        username = userForm.cleaned_data['username']
+        password = userForm.cleaned_data['password']
+        dni = authorForm.cleaned_data['dni']
+        tmp_user, created = User.objects.get_or_create(username=username)
+
+        return {'username': username}
+
+        if created:  
+            tmp_user.set_password(password)
+            tmp_user.save()
+        author, created = Author.objects.get_or_create(user=tmp_user, defaults={'dni': dni})
+        if created:  
+            author.dni = dni
+            author.id = username
+            author.save()
+        return redirect('index')
+   
+    else:
+       
+        userForm = UserForm()
+        authorForm = AuthorForm()
+        return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})

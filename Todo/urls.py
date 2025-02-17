@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_index_page, list_tasks, add_task, edit_task, delete_task, show_register_page
+from .views import show_index_page, list_tasks, add_task, edit_task, delete_task, add_author
 
 urlpatterns = [
     path('', show_index_page, name='index'),
@@ -8,5 +8,5 @@ urlpatterns = [
     path('editar/<int:task_id>/', edit_task, name= 'editar_task'),
     path('eliminar/<int:id>/', delete_task, name='eliminar_task'),
     path('index/<str:user>/', show_index_page, name='index'),
-    path('register/', show_register_page, name='add_author'),
+    path('register/', add_author, name='add_author'),
 ]
