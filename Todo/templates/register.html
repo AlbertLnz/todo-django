@@ -13,14 +13,17 @@
 <!-- 👇🏼 Faig una etiqueta <nav> (navegació) amb diferents <p> (parràgrafs) i dins de cada <p>, un <a> (enllaç) -->
 <!-- ➕ Es pot afegir un atribut 'style' en totes les etiquetes per fer "estils en línea" (en comptes d'haver de crear un archiu .css apart) -->
 <nav style="list-style-type: none;">
-  <p>Registre</p>
-     <!-- La 'action' s'ha d'indicar el "name" de la "urls"! (+ parámetres si hi ha) -->
-     <form action="{% url 'add_author' %}" method="POST">
-        {% csrf_token %}
-        {{ userForm.as_p }}
-        {{ authorForm.as_p }}
-        <button type="submit">Registra</button>
-    </form>
+  <h2>Registre</h2>
+
+  <p style="color: red;">{{ error_message }}</p>
+
+  <!-- La 'action' s'ha d'indicar el "name" de la "urls"! (+ parámetres si hi ha) -->
+  <form action="{% url 'add_author' %}" method="POST">
+    {% csrf_token %}
+    {{ userForm.as_p }}
+    {{ authorForm.as_p }}
+    <button type="submit">Registra</button>
+  </form>
 </nav>
 
 {% endblock %}
