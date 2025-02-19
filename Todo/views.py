@@ -1,21 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Task, Category, Author
 from .forms import TaskForm, AuthorForm, UserForm
 
 # Create your views here.
 
 def show_index_page(request):
-    return render(request, 'index.html', { 'title': "Aplicació To-Do"})
+    user = request.user
 
+    return render(request, 'index.html', { 'title': "Aplicació To-Do", 'user': user})
+
+@login_required
 def list_tasks(request):
+    user = request.user
     # Aqui utilizo 'Author' en compte de 'User' perque son molt semblants (es diferencien només que User no té dni)
     # I en la vista, només vull el "name", així que es indiferent
     author = Author.objects.all()
     tasks = Task.objects.all()
     categories = Category.objects.all()
-
-    return render(request, 'list_tasks.html', {'authors': author, 'tasks': tasks, 'categories': categories})
+    return render(request, 'list_tasks.html', {'authors': author, 'tasks': tasks, 'categories': categories, 'user': user})
 
 def add_task(request):
     if request.method == 'POST':
@@ -92,7 +98,7 @@ def show_register_page(request):
     return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
 
 
-def add_author(request):
+def register_author(request):
     if request.method == 'POST':
         userForm = UserForm(request.POST)
         authorForm = AuthorForm(request.POST)
@@ -113,7 +119,7 @@ def add_author(request):
             if created:
                 author.dni = dni
                 author.save()
-            return redirect('llistar_tasques')
+            return redirect('login')
 
         elif not authorForm.is_valid():
             return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm(), 'error_message': ' - DNI incorrect, ha de tenir 8 números i 1 lletra'})
@@ -123,3 +129,23 @@ def add_author(request):
 
     else:
         return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm()})
+
+def login_author(request):
+    if request.method == "POST":
+        userForm = AuthenticationForm(data=request.POST)
+        if userForm.is_valid():
+            username = userForm.cleaned_data.get("username")
+            password = userForm.cleaned_data["password"]
+            password2 = request.POST["password2"]
+           
+            if password == password2:
+                user = authenticate(username=username,password=password)
+                login(request, user)
+                return redirect('llistar_tasques')
+        return render(request, 'login.html', {'userForm': AuthenticationForm(), 'error_message': 'Usuari no validat'})
+    else:
+        return render(request, 'login.html', {'userForm': AuthenticationForm()})
+
+def signout(request):
+    logout(request)
+    return redirect('index')

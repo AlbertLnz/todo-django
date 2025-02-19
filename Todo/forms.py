@@ -27,7 +27,7 @@ class UserForm(forms.ModelForm):
         fields=['username', 'password']
 
     widgets = {
-        'username': forms.TextInput(attrs={'name': 'user_id'}),
+        'username': forms.TextInput(attrs={'name': 'username'}),
         'password': forms.PasswordInput(attrs={'name': 'password'})
 
     }

@@ -10,9 +10,30 @@
 
     <!-- 👇🏼 Aquí es on ha d'anar el titol de la página web perque es vegi en la pestanya web -->
     <title>{% block title %}{% endblock %}</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-
 <body>
+    <nav class="bg-yellow-200 p-4 text-black flex justify-between items-center">
+        <p class="font-semibold">{{ user }}</p>
+        <div class="space-x-4">
+            {% if user.is_authenticated %}
+                <p class="inline-block"><a href="/signout">Sign out</a></p>
+                <p class="inline-block">
+                    Veure totes les tasques: 
+                    <a href="/list" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
+                </p>
+            {% else %}
+                <p class="inline-block">
+                    Login: 
+                    <a href="/login" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
+                </p>
+                <p class="inline-block">
+                    Registre: 
+                    <a href="/register" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
+                </p>
+            {% endif %}
+        </div>
+    </nav>
     <!-- 👇🏼 Aquí anirá el contingut principal de la web, anomenat 'main' -->
     {% block main %}
     {% endblock %}
