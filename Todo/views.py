@@ -67,7 +67,7 @@ def edit_task(request, task_id):
         task.save()
 
         return redirect('llistar_tasques')
-    # task = 
+    # task =
     # libro = get_object_or_404(Libro, id=id)
     # if request.method == 'POST':
     # form = LibroForm(request.POST, instance=libro)
@@ -86,10 +86,9 @@ def delete_task(request, id):
 
 # ########### AUTHOR #####################
 
-
 def show_register_page(request):
-    authorForm = AuthorForm() 
-    userForm = UserForm() 
+    authorForm = AuthorForm()
+    userForm = UserForm()
     return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
 
 
@@ -99,25 +98,28 @@ def add_author(request):
         authorForm = AuthorForm(request.POST)
 
         if userForm.is_valid() and authorForm.is_valid():
-            username = userForm.cleaned_data['username']
+            username = userForm.cleaned_data['username'] # Abans d'utilitzar 'cleaned_data', has de validar que el form sigui vàlid
             password = userForm.cleaned_data['password']
             dni = authorForm.cleaned_data['dni']
 
-            tmp_user, user_created = User.objects.get_or_create(username=username)
+            tmp_user, created = User.objects.get_or_create(username=username)
 
-            if user_created:  
+            if created:
                 tmp_user.set_password(password)
                 tmp_user.save()
 
-            author, author_created = Author.objects.get_or_create(user=tmp_user, defaults={'dni': dni})
+            author, created = Author.objects.get_or_create(user=tmp_user, defaults={'dni': dni})
 
-            if author_created:  
+            if created:
                 author.dni = dni
                 author.save()
+            return redirect('llistar_tasques')
 
-            return redirect('index') 
+        elif not authorForm.is_valid():
+            return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm(), 'error_message': ' - DNI incorrect, ha de tenir 8 números i 1 lletra'})
 
-    userForm = UserForm()
-    authorForm = AuthorForm()
+        else:
+            return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm(), 'error_message': ' - Error en el usuari o password'})
 
-    return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm}) 
+    else:
+        return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm()})
