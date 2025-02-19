@@ -119,7 +119,7 @@ def register_author(request):
             if created:
                 author.dni = dni
                 author.save()
-            return redirect('login')
+            return redirect('login_author')
 
         elif not authorForm.is_valid():
             return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm(), 'error_message': ' - DNI incorrect, ha de tenir 8 números i 1 lletra'})
