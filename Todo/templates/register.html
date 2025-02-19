@@ -14,6 +14,7 @@
 <!-- ➕ Es pot afegir un atribut 'style' en totes les etiquetes per fer "estils en línea" (en comptes d'haver de crear un archiu .css apart) -->
 <nav style="list-style-type: none;">
   <p>Registre</p>
+  <p>{{ error_message}}</p>
      <!-- La 'action' s'ha d'indicar el "name" de la "urls"! (+ parámetres si hi ha) -->
      <form action="{% url 'add_author' %}" method="POST">
         {% csrf_token %}
