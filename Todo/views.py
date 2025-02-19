@@ -97,26 +97,27 @@ def add_author(request):
     if request.method == 'POST':
         userForm = UserForm(request.POST)
         authorForm = AuthorForm(request.POST)
-    
-        username = userForm.cleaned_data['username']
-        password = userForm.cleaned_data['password']
-        dni = authorForm.cleaned_data['dni']
-        tmp_user, created = User.objects.get_or_create(username=username)
 
-        return {'username': username}
+        if userForm.is_valid() and authorForm.is_valid():
+            username = userForm.cleaned_data['username']
+            password = userForm.cleaned_data['password']
+            dni = authorForm.cleaned_data['dni']
 
-        if created:  
-            tmp_user.set_password(password)
-            tmp_user.save()
-        author, created = Author.objects.get_or_create(user=tmp_user, defaults={'dni': dni})
-        if created:  
-            author.dni = dni
-            author.id = username
-            author.save()
-        return redirect('index')
-   
-    else:
-       
-        userForm = UserForm()
-        authorForm = AuthorForm()
-        return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
+            tmp_user, user_created = User.objects.get_or_create(username=username)
+
+            if user_created:  
+                tmp_user.set_password(password)
+                tmp_user.save()
+
+            author, author_created = Author.objects.get_or_create(user=tmp_user, defaults={'dni': dni})
+
+            if author_created:  
+                author.dni = dni
+                author.save()
+
+            return redirect('index') 
+
+    userForm = UserForm()
+    authorForm = AuthorForm()
+
+    return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm}) 

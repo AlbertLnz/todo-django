@@ -23,7 +23,7 @@ class UserForm(forms.ModelForm):
 
     widgets = {
         'username': forms.TextInput(attrs={'name': 'user_id'}),
-        'password': forms.PasswordInput(attrs={'name': 'password'})
+        'password': forms.PasswordInput(attrs={'name': 'password'}, render_value=False)
   
     }
 class AuthorForm(forms.ModelForm):
@@ -38,20 +38,22 @@ class AuthorForm(forms.ModelForm):
             'dni': forms.TextInput(attrs={'name': 'dni'}),
         }
         
-    # def dni_validation(dni):
-    #     pattern = r"^(\d{8})([A-Z])$"
-    #     return re.fullmatch(pattern, dni)
+    def dni_validation(self, dni):
+        pattern = r"^(\d{8})([A-Z])$"
+        return re.fullmatch(pattern, dni)
     
-    # def clean_dni(self):
-    #     dni = self.cleaned_data.get('dni')
+    def clean_dni(self):
+        dni = self.cleaned_data.get('dni')
         
-    #     if not self.dni_validation(dni):
-    #         raise forms.ValidationError("DNI incorrecto")
+        if not self.dni_validation(dni):
+            raise forms.ValidationError("DNI incorrecto")
+        else:
+            return dni
         
-    #     return dni
-    # def clean_user(self):
-    #     user = self.cleaned_data.get('user_id')
-    #     return user
-    # def clean_password(self):
-    #     user = self.cleaned_data.get('password')
-    #     return user
+        return dni
+    def clean_user(self):
+        user = self.cleaned_data.get('user_id')
+        return user
+    def clean_password(self):
+        user = self.cleaned_data.get('password')
+        return user
