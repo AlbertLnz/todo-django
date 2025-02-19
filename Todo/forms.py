@@ -3,6 +3,8 @@ from .models import Task, Author
 from django.contrib.auth.models import User
 import re
 
+# ~~~~~~~~~~~~ TASK ~~~~~~~~~~~~~~~~~~
+
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
@@ -16,6 +18,9 @@ class TaskForm(forms.ModelForm):
             # 'categories': forms.SelectMultiple(attrs={'name': 'categories'})
         }
 
+
+# ~~~~~~~~~~~~ REGISTER USER ~~~~~~~~~~~~~~~~~~
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -23,37 +28,23 @@ class UserForm(forms.ModelForm):
 
     widgets = {
         'username': forms.TextInput(attrs={'name': 'user_id'}),
-        'password': forms.PasswordInput(attrs={'name': 'password'}, render_value=False)
-  
+        'password': forms.PasswordInput(attrs={'name': 'password'})
+
     }
+
 class AuthorForm(forms.ModelForm):
     class Meta:
-       
         model = Author
         fields = ['dni']
-
-        # FIX! No sé perquè 'author' i 'categories' no fa bé la validació...
 
         widgets = {
             'dni': forms.TextInput(attrs={'name': 'dni'}),
         }
-        
-    def dni_validation(self, dni):
-        pattern = r"^(\d{8})([A-Z])$"
-        return re.fullmatch(pattern, dni)
-    
+
+    # S'executa automàticament al utilizar la función 'is_valid'
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
-        
-        if not self.dni_validation(dni):
-            raise forms.ValidationError("DNI incorrecto")
-        else:
-            return dni
-        
+        pattern = r"^(\d{8})([A-Z])$"
+        if not re.fullmatch(pattern, dni):
+            raise forms.ValidationError("El DNI no vàlid")
         return dni
-    def clean_user(self):
-        user = self.cleaned_data.get('user_id')
-        return user
-    def clean_password(self):
-        user = self.cleaned_data.get('password')
-        return user
