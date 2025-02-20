@@ -1,0 +1,44 @@
+/* GLOBAL (reset styles) */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #c7bae2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+/* NAVBAR */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    background-color: #a989e8;
+    font-size: 18px;
+    border-bottom: 8px solid #2a086f;
+
+    & a {
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    & div {
+        display: flex;
+        gap: 0 10px;
+
+    }
+}

@@ -5,35 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+
     <!-- 👇🏼 Aquí creo un block on insertaré de manera dinàmica el arxiu .css si ho necessites -->
     {% block custom_css_file %}{% endblock %}
 
     <!-- 👇🏼 Aquí es on ha d'anar el titol de la página web perque es vegi en la pestanya web -->
     <title>{% block title %}{% endblock %}</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
+
 <body>
-    <nav class="bg-yellow-200 p-4 text-black flex justify-between items-center">
-        <p class="font-semibold">{{ user }}</p>
-        <div class="space-x-4">
+    <nav>
+        {% if user.is_authenticated %}
+        <a href="/">{{ user }}</a>
+        {% else %}
+        <a href="/">Homepage</a>
+        {% endif %}
+        <div>
             {% if user.is_authenticated %}
-                <p class="inline-block"><a href="/signout">Sign out</a></p>
-                <p class="inline-block">
-                    Veure totes les tasques: 
-                    <a href="/list" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
-                </p>
+            <p><a href="/signout">Sign out</a></p>
+            <a href="/list">
+                Veure totes les tasques
+            </a>
             {% else %}
-                <p class="inline-block">
-                    Login: 
-                    <a href="/login" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
-                </p>
-                <p class="inline-block">
-                    Registre: 
-                    <a href="/register" class="text-yellow-300 hover:text-yellow-400 underline">AQUI</a>
-                </p>
+            <a href="/login">
+                Login
+            </a>
+            <a href="/register">Register</a>
             {% endif %}
         </div>
     </nav>
+
     <!-- 👇🏼 Aquí anirá el contingut principal de la web, anomenat 'main' -->
     {% block main %}
     {% endblock %}

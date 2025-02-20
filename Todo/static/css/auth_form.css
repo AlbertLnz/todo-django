@@ -1,0 +1,52 @@
+section {
+    position: relative;
+    background-color: darkkhaki;
+    border: 4px double rgb(108, 104, 49);
+    margin: auto 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 3rem 3rem 3rem;
+    border-radius: 20px;
+
+    & h1 {
+        margin-bottom: 10px;
+    }
+
+    & form {
+        & p {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem;
+
+            & input {
+                margin-top: 2px;
+                padding: 8px;
+            }
+
+            & span {
+                font-size: 12px;
+                font-style: italic;
+            }
+        }
+
+        & button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 6px 0;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    #error-msg {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 8px;
+        color: red;
+        font-weight: 700;
+    }
+}
