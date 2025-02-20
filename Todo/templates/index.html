@@ -4,14 +4,32 @@
 <!-- 👇🏼 Inicio i finalitzo (1 línia) el block de 'title' definit en el 'layout.html' -->
 { % block title } {{ "Pàgina d'inici" }} { % endblock % }
 
+{% load static %}
+{% block custom_css_file %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
 <!-- 👇🏼 Inicio el block de 'main' definit en el 'layout.html' -->
 {% block main %}
 
 <!-- 👇🏼 Recupero el valor de 'title' definit en 'views.py' en la funció 'show_index_page' -->
-<h1>{{ title }}</h1>
 
-<!-- 👇🏼 Faig una etiqueta <nav> (navegació) amb diferents <p> (parràgrafs) i dins de cada <p>, un <a> (enllaç) -->
-<!-- ➕ Es pot afegir un atribut 'style' en totes les etiquetes per fer "estils en línea" (en comptes d'haver de crear un archiu .css apart) -->
+<section>
+    <h1>{{ title }}</h1>
+    <img src="https://media-public.canva.com/VnSZM/MAFnYCVnSZM/1/t.png" alt="To-do icon">
 
+    <a href="https://github.com/emmaschzal/todo-django" target="_blank">
+        <img src="https://pngimg.com/uploads/github/github_PNG23.png" alt="GitHub logo">
+    </a>
+
+    <article>
+        <h2>Authors</h2>
+        <ul>
+            <li><a href="https://www.linkedin.com/in/mar-falom%C3%AD-abaa88223/" target="_blank">Mar Falomi</a></li>
+            <li><a href="https://www.linkedin.com/in/emmasanchezalbano/" target="_blank">Emma Sanchez</a></li>
+            <li><a href="https://www.linkedin.com/in/albert-lanza-rio/" target="_blank">Albert Lanza</a></li>
+        </ul>
+    </article>
+</section>
 
 {% endblock %}

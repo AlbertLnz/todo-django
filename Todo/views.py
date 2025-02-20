@@ -137,7 +137,7 @@ def login_author(request):
             username = userForm.cleaned_data.get("username")
             password = userForm.cleaned_data["password"]
             password2 = request.POST["password2"]
-           
+
             if password == password2:
                 user = authenticate(username=username,password=password)
                 login(request, user)

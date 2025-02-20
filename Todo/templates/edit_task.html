@@ -1,22 +1,44 @@
-<h1>Edit task {{task.title}}</h1>
+{% extends 'layout.html' %}
+
+{ % block title } {{ "Editar tasca" }} { % endblock % }
+
+{% load static %}
+{% block custom_css_file %}
+<link rel="stylesheet" href="{% static 'css/edit_task.css' %}">
+{% endblock %}
+
+{% block main %}
+
+<header>
+    <h1>Editar la tasca:</h1>
+    <h3>{{task.title}}</h3>
+</header>
 
 <form action="{% url 'editar_task' task.id %}" method="POST">
     {% csrf_token %}
-    <input type="text" value="{{ task.title }}" name="title">
-
-    <!-- <input type="text" value="{{ task.author }}" > -->
-
-    <select multiple name="categories_ids">
-        {% for c in categories %}
-        <!-- No fa falta indicar-li a la category el '.name' perque el model de Category, quan es crida al objecte, té la funció '__str__' que retorna el nom -->
-        <option value="{{ c.id }}">{{ c }}</option>
-        {% endfor %}
-    </select>
-    
     <label>
-        Completed
-        <input type="checkbox" name="completed" value="True" {% if task.completed %}checked{% endif %}>
+        Nom de la tasca
+        <input type="text" value="{{ task.title }}" name="title">
     </label>
-    <button>Update task</button>
-    
+
+    <label>
+        Categories disponibles
+        <select multiple name="categories_ids">
+            {% for c in categories %}
+            <!-- No fa falta indicar-li a la category el '.name' perque el model de Category, quan es crida al objecte, té la funció '__str__' que retorna el nom -->
+            <option value="{{ c.id }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <div id="task-cmplt">
+        <label for="task-cmplt-input">
+            Completada
+        </label>
+        <input type="checkbox" name="completed" value="True" {% if task.completed %}checked{% endif %}>
+    </div>
+
+    <button>Actualitzar tasca</button>
 </form>
+
+{% endblock %}
