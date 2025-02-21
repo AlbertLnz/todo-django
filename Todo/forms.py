@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Author
+from .models import Task, Author, Category
 from django.contrib.auth.models import User
 import re
 
@@ -17,6 +17,13 @@ class TaskForm(forms.ModelForm):
             # 'author': forms.Select(attrs={'name': 'author'}),
             # 'categories': forms.SelectMultiple(attrs={'name': 'categories'})
         }
+
+# ~~~~~~~~~~~~ CATEGORIES ~~~~~~~~~~~~~~~~~~
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
 
 
 # ~~~~~~~~~~~~ REGISTER USER ~~~~~~~~~~~~~~~~~~

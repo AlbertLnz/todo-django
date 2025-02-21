@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Task, Category, Author
-from .forms import TaskForm, AuthorForm, UserForm
+from .forms import TaskForm, AuthorForm, UserForm, CategoryForm
 
 # Create your views here.
 
@@ -73,21 +73,38 @@ def edit_task(request, task_id):
         task.save()
 
         return redirect('llistar_tasques')
-    # task =
-    # libro = get_object_or_404(Libro, id=id)
-    # if request.method == 'POST':
-    # form = LibroForm(request.POST, instance=libro)
-    # if form.is_valid():
-    # form.save()
-    # return redirect('lista_libros')
-
-    # else:
-    # form = LibroForm(instance=libro)
 
 def delete_task(request, id):
     task = get_object_or_404(Task, id=id)
     task.delete()
     return redirect('llistar_tasques')
+
+# ########### CATEGORIA #####################
+
+def manage_categories(request):
+    categories = Category.objects.all()
+    form = CategoryForm()
+
+    if request.method == 'POST' and 'add' in request.POST:
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_categories')  
+
+    elif request.method == 'POST' and 'edit' in request.POST:
+        category_id = request.POST.get('category_id')
+        category = get_object_or_404(Category, id=category_id)
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_categories')  
+
+    elif request.method == 'POST' and 'delete' in request.POST:
+        category_id = request.POST.get('category_id')
+        category = get_object_or_404(Category, id=category_id)
+        category.delete()
+        return redirect('manage_categories')  
+    return render(request, 'manage_categories.html', {'form': form, 'categories': categories})
 
 
 # ########### AUTHOR #####################

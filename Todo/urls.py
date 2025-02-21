@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_index_page, list_tasks, add_task, edit_task, delete_task, register_author, login_author, signout
+from .views import show_index_page, list_tasks, add_task, edit_task, delete_task, register_author, login_author, signout, manage_categories
 
 urlpatterns = [
     path('', show_index_page, name='index'),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('register/', register_author, name='register_author'),
     path('login/', login_author, name="login_author"),
     path('signout/', signout, name='signout'),
+    path('manage-categories/', manage_categories, name='manage_categories'),
 ]
+
