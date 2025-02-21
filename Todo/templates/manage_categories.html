@@ -27,11 +27,13 @@
         <tr>
             <td>{{ category.name }}</td>
             <td>
+                <!-- Botó per editar una categoria -->
                 <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="category_id" value="{{ category.id }}">
                     <button type="submit" name="edit">Editar</button>
                 </form>
+                <!-- Botó per eliminar una categoria -->
                 <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="category_id" value="{{ category.id }}">
@@ -43,7 +45,20 @@
     </tbody>
 </table>
 
-<!-- Botó per redirigir a list_tasks -->
+<!-- Si estamos editando una categoría, mostrar el formulario de edición -->
+{% if editing %}
+<h3>Editar categoria: {{ category.name }}</h3>
+<form action="{% url 'manage_categories' %}" method="POST">
+    {% csrf_token %}
+    <label for="id_name">Nom de la categoria:</label>
+    <input type="text" id="id_name" name="name" value="{{ category.name }}" required>
+    <input type="hidden" name="category_id" value="{{ category.id }}">
+    <button type="submit" name="update">Guardar cambios</button>
+</form>
+{% endif %}
+
+<!-- Botó per redirigir a la pàgina de llista de tasques -->
 <a href="{% url 'llistar_tasques' %}"><button>Desar canvis</button></a>
 
 {% endblock %}
+

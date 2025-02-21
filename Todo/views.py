@@ -85,25 +85,36 @@ def manage_categories(request):
     categories = Category.objects.all()
     form = CategoryForm()
 
+    # Cuando se crea una nueva categoría
     if request.method == 'POST' and 'add' in request.POST:
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('manage_categories')  
+            return redirect('manage_categories')
 
-    elif request.method == 'POST' and 'edit' in request.POST:
+    # Cuando se edita una categoría
+    if request.method == 'POST' and 'edit' in request.POST:
+        category_id = request.POST.get('category_id')
+        category = get_object_or_404(Category, id=category_id)
+        form = CategoryForm(instance=category)
+        return render(request, 'manage_categories.html', {'form': form, 'categories': categories, 'editing': True, 'category': category})
+
+    # Cuando se actualiza una categoría (guardando cambios)
+    if request.method == 'POST' and 'update' in request.POST:
         category_id = request.POST.get('category_id')
         category = get_object_or_404(Category, id=category_id)
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('manage_categories')  
+            return redirect('manage_categories')
 
-    elif request.method == 'POST' and 'delete' in request.POST:
+    # Cuando se elimina una categoría
+    if request.method == 'POST' and 'delete' in request.POST:
         category_id = request.POST.get('category_id')
         category = get_object_or_404(Category, id=category_id)
         category.delete()
-        return redirect('manage_categories')  
+        return redirect('manage_categories')
+    
     return render(request, 'manage_categories.html', {'form': form, 'categories': categories})
 
 
