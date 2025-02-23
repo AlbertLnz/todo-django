@@ -1,41 +1,28 @@
-section {
-    position: relative;
+a {
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+        text-decoration: underline dashed;
+    }
+}
+
+h1 {
+    font-size: 64px;
+    text-decoration: none;
+}
+
+#todo_logo {
+    width: 150px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+ul {
+    padding: 1rem 0 0 3rem;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    gap: 20px 0;
-    align-items: center;
-    height: 100%;
-
-    & img {
-        width: 250px;
-    }
-
-    & article {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin-right: 40px;
-        padding: 1rem;
-        border-radius: 6px;
-        background-color: peru;
-        text-align: center;
-
-        & ul {
-            margin-top: 10px;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-
-            & a {
-                text-decoration: none;
-                color: black;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
+    gap: 16px;
+    font-size: 28px;
 }

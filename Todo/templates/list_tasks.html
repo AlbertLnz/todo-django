@@ -1,92 +1,75 @@
-<!-- 👇🏼 Faig una extensió del layout -->
 {% extends 'layout.html' %}
 
-<!-- 👇🏼 Inicio el block de 'custom_css_file' definit en el 'layout.html' -->
+{% block title %} Llistat de tasques {% endblock %}
+
 {% load static %}
 {% block custom_css_file %}
 <link rel="stylesheet" href="{% static 'css/list_tasks.css' %}">
 {% endblock %}
 
-<!-- 👇🏼 Inicio i finalitzo el block de 'title' definit en el 'layout.html' -->
-{% block title %} Llistat de tasques {% endblock %}
-
-<!-- 👇🏼 Inicio el block de 'main' definit en el 'layout.html' -->
 {% block main %}
 
-<h1>To-Do app</h1>
-
 <div id="new-task-container">
-    <h3>Afegir nova tasca</h3>
     <form action="{% url 'afegir_task' %}" method="POST">
         {% csrf_token %}
-        <label>
-            Títol
-            <input name="title" type="text" placeholder="Introdueix un títol per la tasca...">
-        </label>
+        <input name="title" type="text" placeholder="Introdueix un títol per la tasca..." required>
+        <input name="user_id" value="{{ user.id }}" hidden>
 
-        <label>
-            Autor
-            <select name="author_id">
-                <option value="" disabled selected>Selecciona un autor</option>
-                {% for author in authors %}
-                <option value="{{ author.id }}">{{ author.user.username }}</option>
-                {% endfor %}
-            </select>
-        </label>
+        <div id="list-categories">
+            {% for c in categories %}
+            <label>
+                <input type="checkbox" name="categories_ids" value="{{ c.id }}">
+                {{ c.name }}
+            </label>
+            {% endfor %}
+        </div>
 
-        <label>
-            Categories a seleccionar
-            <select name="categories_ids" multiple>
-                {% for c in categories %}
-                <option value="{{ c.id }}">{{ c }}</option>
-                {% endfor %}
-            </select>
-        </label>
+        <a href="{% url 'manage_categories' %}" class="btn">Gestionar categories</a>
 
         <button>Afegir nova tasca</button>
     </form>
 </div>
 
-<!-- Botó per gestionar categories en una altra pàgina -->
-<a href="{% url 'manage_categories' %}" class="btn">Gestionar categories</a>
 
-<table>
-    <thead>
-        <th>Id</th>
-        <th>Nom de la tasca</th>
-        <th>Autor</th>
-        <th>Categories</th>
-        <th>Completat</th>
-        <th>Accions</th>
-    </thead>
+<div id="table-container">
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Nom de la tasca</th>
+            <th>Autor</th>
+            <th>Categories</th>
+            <th>Completat</th>
+            <th>Accions</th>
+        </thead>
 
-    <tbody>
-        {% for task in tasks %}
-        <tr>
-            <td>{{ task.id }}</td>
-            <td>{{ task.title }}</td>
-            <td>{{ task.author }}</td>
-            <td>
-                {% for category in task.categories.all %}
-                {{ category }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-            <td>{{ task.completed }}</td>
-            <td>
-                <div id="btns-cell">
-                    <form action="{% url 'editar_task' task.id %}" method="GET">
-                        {% csrf_token %}
-                        <button id="edit-btn">Editar</button>
-                    </form>
-                    <form action="{% url 'eliminar_task' task.id %}" method="GET">
-                        {% csrf_token %}
-                        <button id="delete-btn">Eliminar</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.author }}</td>
+                <td>
+                    {% for category in task.categories.all %}
+                    {{ category }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ task.completed }}</td>
+                <td>
+                    <div id="btns-cell">
+                        <form action="{% url 'editar_task' task.id %}" method="GET">
+                            {% csrf_token %}
+                            <button id="edit-btn">Editar</button>
+                        </form>
+                        <form action="{% url 'eliminar_task' task.id %}" method="GET">
+                            {% csrf_token %}
+                            <button id="delete-btn">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

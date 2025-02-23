@@ -10,12 +10,10 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['title']
 
-        # FIX! No sé perquè 'author' i 'categories' no fa bé la validació...
-
         widgets = {
             'title': forms.TextInput(attrs={'name': 'title'}),
-            # 'author': forms.Select(attrs={'name': 'author'}),
-            # 'categories': forms.SelectMultiple(attrs={'name': 'categories'})
+            # 'author', foreignKey don't need to be on form
+            # 'categories': foreignKey don't need to be on form
         }
 
 # ~~~~~~~~~~~~ CATEGORIES ~~~~~~~~~~~~~~~~~~
@@ -33,22 +31,20 @@ class UserForm(forms.ModelForm):
         model = User
         fields=['username', 'password']
 
-    widgets = {
-        'username': forms.TextInput(attrs={'name': 'username'}),
-        'password': forms.PasswordInput(attrs={'name': 'password'})
-
-    }
+        widgets = {
+            'username': forms.TextInput(attrs={'name': 'username'}),
+            'password': forms.PasswordInput(attrs={'name': 'password'})
+        }
 
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['dni']
+        fields = ['dni', 'photo']
 
         widgets = {
             'dni': forms.TextInput(attrs={'name': 'dni'}),
         }
 
-    # S'executa automàticament al utilizar la función 'is_valid'
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
         pattern = r"^(\d{8})([A-Z])$"
