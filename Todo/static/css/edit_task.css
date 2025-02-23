@@ -1,15 +1,15 @@
-header {
-    margin: 20px auto;
-    text-align: center;
+h1 {
+    font-size: 64px;
 }
 
 form {
-    background-color: cornflowerblue;
     display: flex;
     flex-direction: column;
-    margin: 0 35%;
-    padding: 3rem;
-    border-radius: 20px;
+
+    & input[type="text"] {
+        width: 100%;
+        font-size: 18px;
+    }
 
     & label {
         display: flex;
@@ -19,7 +19,7 @@ form {
 
         & input,
         select {
-            padding: 0.4rem;
+            padding: 0.5rem;
         }
     }
 

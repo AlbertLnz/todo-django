@@ -1,64 +1,67 @@
 {% extends 'layout.html' %}
 
+{% block title %} Gestionar categories {% endblock %}
+
 {% load static %}
 {% block custom_css_file %}
 <link rel="stylesheet" href="{% static 'css/manage_categories.css' %}">
 {% endblock %}
 
-{% block title %}Gestionar categories{% endblock %}
-
 {% block main %}
+
 <h1>Gestionar categories</h1>
 
-<!-- Formulari per a agregar categories -->
-<h3>Afegir nova categoria</h3>
-<form action="{% url 'manage_categories' %}" method="POST">
+<form class="add-category-form" action="{% url 'manage_categories' %}" method="POST">
     {% csrf_token %}
-    <label for="id_name">Nom de la categoria:</label>
-    <input type="text" id="id_name" name="name" placeholder="Escriu el nom de la categoria" required>
-    <button type="submit" name="add">Afegir</button>
+    <input type="text" id="id_name" name="name" placeholder="Edita el nom de la categoria" required>
+    <button type="submit" name="afegir">Afegir</button>
 </form>
 
-<!-- Mostrar les categories existents -->
-<h3>Categories existents</h3>
-<table>
-    <tbody>
-        {% for category in categories %}
-        <tr>
-            <td>{{ category.name }}</td>
-            <td>
-                <!-- Botó per editar una categoria -->
-                <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="category_id" value="{{ category.id }}">
-                    <button type="submit" name="edit">Editar</button>
-                </form>
-                <!-- Botó per eliminar una categoria -->
-                <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="category_id" value="{{ category.id }}">
-                    <button type="submit" name="delete">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<!-- Si estamos editando una categoría, mostrar el formulario de edición -->
 {% if editing %}
-<h3>Editar categoria: {{ category.name }}</h3>
-<form action="{% url 'manage_categories' %}" method="POST">
+<form class="add-category-form" action="{% url 'manage_categories' %}" method="POST">
     {% csrf_token %}
-    <label for="id_name">Nom de la categoria:</label>
-    <input type="text" id="id_name" name="name" value="{{ category.name }}" required>
     <input type="hidden" name="category_id" value="{{ category.id }}">
-    <button type="submit" name="update">Guardar cambios</button>
+    <input type="text" name="name" value="{{ category.name }}" required>
+    <button type="submit" name="update">Guardar canvis</button>
 </form>
 {% endif %}
 
-<!-- Botó per redirigir a la pàgina de llista de tasques -->
-<a href="{% url 'llistar_tasques' %}"><button>Desar canvis</button></a>
+<div id="categories-table">
+    {% for category in categories %}
+    <div class="category-cell">
+        <div class="category-actions">
+            <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="text" class="category-name" name="name" value="{{ category.name }}" readonly />
+                <br />
+                <input type="hidden" name="category_id" value="{{ category.id }}">
+                <button type="submit" name="edit">
+                    Editar
+                </button>
+            </form>
+
+            <form action="{% url 'manage_categories' %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="category_id" value="{{ category.id }}">
+                <button type="submit" name="delete">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoryCells = document.querySelectorAll('.category-cell')
+        const colors = ['#B0E9CA', '#FFEADD', '#FDE99D', '#FFD8F4', '#D9E8FC']
+
+        categoryCells.forEach(cell => {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)]
+            cell.style.backgroundColor = randomColor
+        })
+    })
+</script>
 
 {% endblock %}
-

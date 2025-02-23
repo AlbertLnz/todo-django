@@ -1,37 +1,27 @@
-<!-- 👇🏼 Faig una extensió del layout -->
 {% extends 'layout.html' %}
 
-<!-- 👇🏼 Inicio i finalitzo (1 línia) el block de 'title' definit en el 'layout.html' -->
-{ % block title } {{ "Register User" }} { % endblock % }
+{% block title %} Login {% endblock %}
 
 {% load static %}
 {% block custom_css_file %}
 <link rel="stylesheet" href="{% static 'css/auth_form.css' %}">
 {% endblock %}
 
-<!-- 👇🏼 Inicio el block de 'main' definit en el 'layout.html' -->
 {% block main %}
 
-<!-- 👇🏼 Recupero el valor de 'title' definit en 'views.py' en la funció 'show_index_page' -->
-<h1>{{ title }}</h1>
+<h1>Login</h1>
 
-<!-- 👇🏼 Faig una etiqueta <nav> (navegació) amb diferents <p> (parràgrafs) i dins de cada <p>, un <a> (enllaç) -->
-<!-- ➕ Es pot afegir un atribut 'style' en totes les etiquetes per fer "estils en línea" (en comptes d'haver de crear un archiu .css apart) -->
-<section>
-  <h1>Login</h1>
-  <!-- La 'action' s'ha d'indicar el "name" de la "urls"! (+ parámetres si hi ha) -->
-  <form action="{% url 'login_author' %}" method="POST" class="flex flex-col gap-y-4">
-    {% csrf_token %}
-    {{ userForm.as_p }}
-    <p>
-      <label for="repeat-password">
-        Confirm password:
-      </label>
-      <input id="repeat-password" type="password" name="password2">
-    </p>
-    <button type="submit">Login</button>
-  </form>
-  <p id="error-msg">{{ error_message}}</p>
-</section>
+<form action="{% url 'login_author' %}" method="POST" class="flex flex-col gap-y-4">
+  {% csrf_token %}
+  {{ userForm.as_p }}
+  <p>
+    <label for="repeat-password">
+      Confirm password:
+    </label>
+    <input id="repeat-password" type="password" name="password2">
+  </p>
+  <button type="submit">Login</button>
+</form>
+<p id="error-msg">{{ error_message}}</p>
 
 {% endblock %}

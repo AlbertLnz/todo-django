@@ -1,0 +1,23 @@
+<nav>
+    {% if user.is_authenticated %}
+    <div>
+        <img id="avatar" src="{{ user.author.photo.url }}" alt="avatar">
+        <a href="/">{{ user }}</a>
+    </div>
+    {% else %}
+    <a href="/">Homepage</a>
+    {% endif %}
+    <div>
+        {% if user.is_authenticated %}
+        <p><a href="/signout">Sign out</a></p>
+        <a href="/list">
+            Veure totes les tasques
+        </a>
+        {% else %}
+        <a href="/login">
+            Login
+        </a>
+        <a href="/register">Register</a>
+        {% endif %}
+    </div>
+</nav>

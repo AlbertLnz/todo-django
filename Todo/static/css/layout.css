@@ -1,31 +1,50 @@
 /* GLOBAL (reset styles) */
+@font-face {
+    font-family: 'Gochi Hand';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/gochi-hand@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/gochi-hand@latest/latin-400-normal.woff) format('woff');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Gochi Hand';
+    letter-spacing: 0.025em;
 }
 
 body {
-    background-color: #c7bae2;
-    min-height: 100vh;
+    background-color: #FFF5F0;
+    height: 100vh;
+    padding: 2rem;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-h1 {
-    font-size: 40px;
+main {
+    background-image: url('https://img.freepik.com/premium-photo/sheet-blank-lined-notebook-paper-background-extra-large-highly-detailed-image_598586-284.jpg?semt=ais_hybrid');
+    height: 100%;
+    aspect-ratio: 1.5/1;
+    display: grid;
+    grid-template-rows: 15% 85%;
+    border-radius: 20px;
+    border: 8px solid #FFAE80;
 }
 
 /* NAVBAR */
-
 nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 2rem;
-    background-color: #a989e8;
     font-size: 18px;
-    border-bottom: 8px solid #2a086f;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 6px dashed #FF8D4C;
+    background-color: #FFDECC;
 
     & a {
         color: black;
@@ -38,7 +57,24 @@ nav {
 
     & div {
         display: flex;
+        align-items: center;
         gap: 0 10px;
 
+        & img {
+            width: 40px;
+            border-radius: 4px;
+            background-color: salmon;
+        }
     }
+}
+
+/* SECTION (all content) */
+section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-items: start;
+    padding: 1rem 1rem 1rem 2rem;
+    height: 100%;
+    overflow: hidden;
 }

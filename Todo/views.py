@@ -6,30 +6,35 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import Task, Category, Author
 from .forms import TaskForm, AuthorForm, UserForm, CategoryForm
 
-# Create your views here.
+# def show_index_page(request):
+#     '''
+#     Renderitza la pàgina principal
+#     '''
+#     user = request.user
 
-def show_index_page(request):
-    user = request.user
-
-    return render(request, 'index.html', { 'title': "Aplicació To-Do", 'user': user})
+#     return render(request, 'index.html', { 'title': "Aplicació To-Do", 'user': user})
 
 @login_required
 def list_tasks(request):
+    '''
+    Renderitza la pàgina de llistar tasues
+    '''
     user = request.user
-    # Aqui utilizo 'Author' en compte de 'User' perque son molt semblants (es diferencien només que User no té dni)
-    # I en la vista, només vull el "name", així que es indiferent
-    author = Author.objects.all()
-    tasks = Task.objects.all()
+    author = Author.objects.get(user=user)
+    tasks = Task.objects.filter(author=author)
     categories = Category.objects.all()
-    return render(request, 'list_tasks.html', {'authors': author, 'tasks': tasks, 'categories': categories, 'user': user})
+    return render(request, 'list_tasks.html', {'user': user, 'tasks': tasks, 'categories': categories, 'user': user})
 
 def add_task(request):
+    '''
+    Afegir tasca
+    '''
     if request.method == 'POST':
         form = TaskForm(request.POST)
 
         if form.is_valid():
             title = request.POST.get('title')
-            author_id = request.POST.get('author_id')
+            author_id = request.POST.get('user_id')
             categories_ids = request.POST.getlist('categories_ids')
 
             author = Author.objects.get(id=author_id)
@@ -40,18 +45,20 @@ def add_task(request):
                 author=author,
                 completed=False,
             )
-            task.categories.set(categories) # En les relacion Many-To-Many, s'ha d'afegir amb un 'set'
+            task.categories.set(categories)
 
             task.save()
             return redirect('llistar_tasques')
         else:
-            return redirect('index')
+            return redirect('llistar_tasques')
 
     else:
         return TaskForm()
 
 def edit_task(request, task_id):
-
+    '''
+    Editar tasca
+    '''
     if request.method == "GET":
         task = get_object_or_404(Task, id=task_id)
         categories = Category.objects.all()
@@ -68,13 +75,16 @@ def edit_task(request, task_id):
 
         task.title = title
         task.completed = is_completed
-        task.categories.set(categories)  # Asignar las categorías seleccionadas
+        task.categories.set(categories)
 
         task.save()
 
         return redirect('llistar_tasques')
 
-def delete_task(request, id):
+def delete_task(_, id):
+    '''
+    Eliminar tasca
+    '''
     task = get_object_or_404(Task, id=id)
     task.delete()
     return redirect('llistar_tasques')
@@ -82,11 +92,14 @@ def delete_task(request, id):
 # ########### CATEGORIA #####################
 
 def manage_categories(request):
+    '''
+    CRUD de categories
+    '''
     categories = Category.objects.all()
     form = CategoryForm()
 
     # Cuando se crea una nueva categoría
-    if request.method == 'POST' and 'add' in request.POST:
+    if request.method == 'POST' and 'afegir' in request.POST:
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
@@ -99,7 +112,7 @@ def manage_categories(request):
         form = CategoryForm(instance=category)
         return render(request, 'manage_categories.html', {'form': form, 'categories': categories, 'editing': True, 'category': category})
 
-    # Cuando se actualiza una categoría (guardando cambios)
+    # # Cuando se actualiza una categoría (guardando cambios)
     if request.method == 'POST' and 'update' in request.POST:
         category_id = request.POST.get('category_id')
         category = get_object_or_404(Category, id=category_id)
@@ -114,19 +127,25 @@ def manage_categories(request):
         category = get_object_or_404(Category, id=category_id)
         category.delete()
         return redirect('manage_categories')
-    
+
     return render(request, 'manage_categories.html', {'form': form, 'categories': categories})
 
 
 # ########### AUTHOR #####################
 
 def show_register_page(request):
+    '''
+    Vista de registrar un usuari
+    '''
     authorForm = AuthorForm()
     userForm = UserForm()
     return render(request, 'register.html', {'userForm': userForm, 'authorForm': authorForm})
 
 
 def register_author(request):
+    '''
+    Acció de registrar un usuari
+    '''
     if request.method == 'POST':
         userForm = UserForm(request.POST)
         authorForm = AuthorForm(request.POST)
@@ -159,6 +178,9 @@ def register_author(request):
         return render(request, 'register.html', {'userForm': UserForm(), 'authorForm': AuthorForm()})
 
 def login_author(request):
+    '''
+    Vista y acció d'inici de sessió del usuari
+    '''
     if request.method == "POST":
         userForm = AuthenticationForm(data=request.POST)
         if userForm.is_valid():
@@ -175,5 +197,8 @@ def login_author(request):
         return render(request, 'login.html', {'userForm': AuthenticationForm()})
 
 def signout(request):
+    '''
+    Acció de tancar sessió d'usuari
+    '''
     logout(request)
     return redirect('index')

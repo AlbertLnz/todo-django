@@ -8,38 +8,19 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
 
-    <!-- 👇🏼 Aquí creo un block on insertaré de manera dinàmica el arxiu .css si ho necessites -->
     {% block custom_css_file %}{% endblock %}
 
-    <!-- 👇🏼 Aquí es on ha d'anar el titol de la página web perque es vegi en la pestanya web -->
     <title>{% block title %}{% endblock %}</title>
 </head>
 
 <body>
-    <nav>
-        {% if user.is_authenticated %}
-        <a href="/">{{ user }}</a>
-        {% else %}
-        <a href="/">Homepage</a>
-        {% endif %}
-        <div>
-            {% if user.is_authenticated %}
-            <p><a href="/signout">Sign out</a></p>
-            <a href="/list">
-                Veure totes les tasques
-            </a>
-            {% else %}
-            <a href="/login">
-                Login
-            </a>
-            <a href="/register">Register</a>
-            {% endif %}
-        </div>
-    </nav>
-
-    <!-- 👇🏼 Aquí anirá el contingut principal de la web, anomenat 'main' -->
-    {% block main %}
-    {% endblock %}
+    <main>
+        {% include './components/navbar.html' %}
+        <section>
+            {% block main %}
+            {% endblock %}
+        </section>
+    </main>
 </body>
 
 </html>
