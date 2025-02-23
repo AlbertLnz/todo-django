@@ -4,6 +4,8 @@ from .views_cbv import IndexPageView
 
 from rest_framework import routers
 from .api import CategoryViewSet, AuthorViewSet, TaskViewSet
+from rest_framework_simplejwt import views as jwt_views
+
 
 urlpatterns = [
     # path('', show_index_page, name='index'),
@@ -18,11 +20,18 @@ urlpatterns = [
     path('login/', login_author, name="login_author"),
     path('signout/', signout, name='signout'),
     path('manage-categories/', manage_categories, name='manage_categories'),
+    # JWT api url
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
+    # TODO check if JWT works after authorization. needs to be a GET/POST with the token as header.
+
 ]
 
 router = routers.DefaultRouter()
 router.register('api/categories', CategoryViewSet, 'category') # == (url, viewSet, name)
 router.register('api/authors', AuthorViewSet, 'author') # == (url, viewSet, name)
 router.register('api/tasks', TaskViewSet, 'task') # == (url, viewSet, name)
+
 
 urlpatterns += router.urls
